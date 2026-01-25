@@ -1,0 +1,126 @@
+/* ===============================
+   FONDO DEL HOME
+================================ */
+.home-bg {
+  min-height: 100vh;
+  background-image: url("/images/fondo_pagina.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ===============================
+   OVERLAY BLANCO
+================================ */
+.home-overlay {
+  background-color: rgba(255, 255, 255, 0.65);
+  min-height: 100vh;
+}
+
+
+/* ===============================
+   CONTENIDO
+================================ */
+.home-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 24px;
+}
+
+/* ===============================
+   TEXTOS
+================================ */
+.home-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  color: #6a1b9a;
+}
+
+.home-subtitle {
+  text-align: center;
+  font-size: 16px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.home-description {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 20px 0;
+}
+
+/* ===============================
+   IMAGEN PRINCIPAL
+================================ */
+.home-main-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 20px;
+  margin: 20px 0;
+}
+
+/* ===============================
+   SECCIONES
+================================ */
+.home-section-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 30px 0 16px;
+  color: #111827;
+}
+
+/* ===============================
+   REFUGIOS
+================================ */
+.refugio-card {
+  display: flex;
+  align-items: center;
+  border-radius: 24px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.refugio-card.reverse {
+  flex-direction: row-reverse;
+}
+
+.refugio-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.refugio-text {
+  padding: 16px;
+}
+
+.refugio-text h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.refugio-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* ===============================
+   ADOPTADOS
+================================ */
+.adopted-list {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.adopted-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  object-fit: cover;
+  background-color: rgba(236, 72, 153, 0.15);
+}
