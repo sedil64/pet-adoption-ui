@@ -35,6 +35,9 @@ export const Navbar = ({ onOpenSidebar }: NavbarProps) => {
               <NavLink to="/mascotas" className={navLinkClasses}>
                 Mascotas
               </NavLink>
+              <NavLink to="/shelters" className={navLinkClasses}>
+                Refugios
+              </NavLink>
             </div>
           </div>
 

@@ -13,6 +13,8 @@ import { AdminPets } from '../pages/admin/AdminPets';
 import { EditPet } from '../pages/admin/EditPet';
 import { AddPet } from '../pages/admin/AddPets';
 import { Register } from '../pages/public/Register';
+import { Shelters } from '../pages/public/Shelters';
+import { ShelterDetail } from '../pages/public/ShelterDetail';
 
 const Placeholder = ({ title }: { title: string }) => <h1 className="text-2xl font-bold">{title}</h1>;
 
@@ -30,6 +32,9 @@ export const AppRouter = () => {
           <Route path="/mascotas/:id" element={<PetDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Register />} />
+          <Route path="/shelters" element={<Shelters />} />
+          <Route path="/shelters/:id" element={<ShelterDetail />} />
+
 
           {/* =======================
               RUTAS PRIVADAS

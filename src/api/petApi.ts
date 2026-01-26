@@ -7,11 +7,16 @@ interface PaginatedResponse<T> {
   previous: string | null;
   results: T[];
 }
+export const getPets = async (
+  params?: Record<string, any>
+): Promise<Pet[]> => {
+  const response = await api.get<PaginatedResponse<Pet> | Pet[]>('/pets/', {
+    params,
+  });
 
-export const getPets = async (): Promise<Pet[]> => {
-  const response = await api.get<PaginatedResponse<Pet> | Pet[]>('/pets/');
-  
-  return Array.isArray(response.data) ? response.data : response.data.results;
+  return Array.isArray(response.data)
+    ? response.data
+    : response.data.results;
 };
 
 export const getPetById = async (id: string): Promise<Pet> => {
@@ -28,7 +33,10 @@ export const createPet = async (petFormData: FormData): Promise<Pet> => {
   return response.data;
 };
 
-export const updatePet = async (id: number, petFormData: FormData): Promise<Pet> => {
+export const updatePet = async (
+  id: number,
+  petFormData: FormData
+): Promise<Pet> => {
   const response = await api.patch<Pet>(`/pets/${id}/`, petFormData, {
     headers: {
       'Content-Type': 'multipart/form-data',

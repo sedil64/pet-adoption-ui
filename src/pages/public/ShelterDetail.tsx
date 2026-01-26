@@ -1,35 +1,45 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { getPets } from '../../api/petApi';
+import { getShelterById } from '../../api/shelters.api';
 import type { Pet } from '../../types/pet.types';
 import { PetCard } from '../../components/ui/PetCard';
 
-export const Pets = () => {
+export const ShelterDetail = () => {
+  const { id } = useParams();
+  const shelterId = Number(id);
+
   const [pets, setPets] = useState<Pet[]>([]);
+  const [shelter, setShelter] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [filters] = useState<Record<string, any>>({});
-
   useEffect(() => {
-    const fetchPets = async () => {
+    const fetchShelterAndPets = async () => {
       try {
         setLoading(true);
-        const data = await getPets(filters); 
-        setPets(data);
+
+        const [shelterData, petsData] = await Promise.all([
+          getShelterById(shelterId),
+          getPets({ shelter: shelterId })
+        ]);
+
+        setShelter(shelterData);
+        setPets(petsData);
       } catch (err) {
-        setError('Ocurrió un error al cargar las mascotas. Intenta de nuevo más tarde.');
+        setError('Ocurrió un error al cargar el refugio.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPets();
-  }, [filters]); 
+    fetchShelterAndPets();
+  }, [shelterId]);
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <span className="text-gray-500 font-medium">Cargando mascotas...</span>
+        <span className="text-gray-500 font-medium">Cargando refugio...</span>
       </div>
     );
   }
@@ -42,18 +52,21 @@ export const Pets = () => {
     );
   }
 
+  if (!shelter) return null;
+
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Mascotas en adopción</h1>
-        <p className="text-gray-600 mt-2">
-          Conoce a nuestros amigos que están buscando un hogar lleno de amor.
-        </p>
+        <h1 className="text-3xl font-bold text-gray-800">
+          {shelter.name}
+        </h1>
+        <p className="text-gray-600 mt-2">{shelter.address}</p>
+        <p className="text-gray-600">{shelter.phone}</p>
       </div>
 
       {pets.length === 0 ? (
         <div className="text-center text-gray-500 py-12 bg-white rounded-lg border border-gray-100">
-          No hay mascotas disponibles en este momento.
+          Este refugio no tiene mascotas disponibles.
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
