@@ -16,6 +16,9 @@ import { AddPet } from '../pages/admin/AddPets';
 import { Register } from '../pages/public/Register';
 import { Shelters } from '../pages/public/Shelters';
 import { ShelterDetail } from '../pages/public/ShelterDetail';
+import { AdminShelters } from '../pages/admin/AdminShelters';
+import { AddShelter } from '../pages/admin/AddShelter';
+import { EditShelter } from '../pages/admin/EditShelter';
 
 export const AppRouter = () => {
   return (
@@ -51,6 +54,9 @@ export const AppRouter = () => {
             <Route path="/admin/mascotas" element={<AdminPets />} />
             <Route path="/admin/mascotas/nueva" element={<AddPet />} />
             <Route path="/admin/mascotas/editar/:id" element={<EditPet />} />
+            <Route path="/admin/refugios" element={<AdminShelters />} />
+            <Route path="/admin/refugios/nuevo" element={<AddShelter />} />
+            <Route path="/admin/refugios/:id/editar" element={<EditShelter />} />
           </Route>
 
         </Route>

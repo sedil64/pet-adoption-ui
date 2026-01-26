@@ -14,3 +14,21 @@ export const getShelters = async () => {
 
 export const getShelterById = (id: number) =>
   api.get(`/shelters/${id}/`).then(res => res.data);
+
+export const createShelter = async (data: FormData) => {
+  const response = await api.post('/shelters/', data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return response.data;
+};
+
+export const updateShelter = async (id: number, data: FormData) => {
+  const response = await api.patch(`/shelters/${id}/`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return response.data;
+};
+
+export const deleteShelter = async (id: number) => {
+  await api.delete(`/shelters/${id}/`);
+};

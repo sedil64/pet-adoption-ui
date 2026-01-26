@@ -78,6 +78,9 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               <NavLink to="/admin/mascotas" onClick={onClose} className={linkClasses}>
                 Gestión de Mascotas
               </NavLink>
+              <NavLink to="/admin/refugios" onClick={onClose} className={linkClasses}>
+                Gestión de Refugios
+              </NavLink>
             </>
           ) : (
             <NavLink to="/mis-solicitudes" onClick={onClose} className={linkClasses}>
