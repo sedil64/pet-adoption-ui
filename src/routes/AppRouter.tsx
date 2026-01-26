@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { RequireAuth, RequireAdmin } from '../components/guards/ProtectedRoutes';
 import { MainLayout } from '../components/layout/MainLayout';
+import Home from '../pages/public/Home';
 import { Login } from '../pages/public/Login';
 import { Pets } from '../pages/public/Pets';
 import { PetDetail } from '../pages/public/PetDetail';
@@ -16,18 +17,18 @@ import { Register } from '../pages/public/Register';
 import { Shelters } from '../pages/public/Shelters';
 import { ShelterDetail } from '../pages/public/ShelterDetail';
 
-const Placeholder = ({ title }: { title: string }) => <h1 className="text-2xl font-bold">{title}</h1>;
-
 export const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* TODAS LAS RUTAS CON LAYOUT */}
         <Route element={<MainLayout />}>
-          
-          {/* =======================
-              RUTAS PÚBLICAS
-          ======================= */}
-          <Route path="/" element={<Placeholder title="Inicio - Puppy Family" />} />
+
+          {/* HOME */}
+          <Route path="/" element={<Home />} />
+
+          {/* PÚBLICAS */}
           <Route path="/mascotas" element={<Pets />} />
           <Route path="/mascotas/:id" element={<PetDetail />} />
           <Route path="/login" element={<Login />} />
@@ -36,18 +37,14 @@ export const AppRouter = () => {
           <Route path="/shelters/:id" element={<ShelterDetail />} />
 
 
-          {/* =======================
-              RUTAS PRIVADAS
-          ======================= */}
+          {/* PRIVADAS */}
           <Route element={<RequireAuth />}>
             <Route path="/mis-solicitudes" element={<MyRequests />} />
             <Route path="/perfil" element={<Profile />} />
             <Route path="/adoptar/:petId" element={<AdoptPet />} />
           </Route>
 
-          {/* =======================
-              RUTAS DE ADMIN
-          ======================= */}
+          {/* ADMIN */}
           <Route element={<RequireAdmin />}>
             <Route path="/admin/solicitudes" element={<AdminRequests />} />
             <Route path="/admin/usuarios" element={<UsersList />} />
@@ -56,8 +53,10 @@ export const AppRouter = () => {
             <Route path="/admin/mascotas/editar/:id" element={<EditPet />} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+
       </Routes>
     </BrowserRouter>
   );

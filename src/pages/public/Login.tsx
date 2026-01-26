@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuthStore } from '../../store/authStore';
 import { loginRequest } from '../../api/authApi';
-import { Link } from 'react-router-dom';
 
 const loginSchema = z.object({
   username: z.string().min(1, 'El nombre de usuario es requerido'),
@@ -19,7 +18,11 @@ export const Login = () => {
   const login = useAuthStore((state) => state.login);
   const [apiError, setApiError] = useState<string | null>(null);
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginForm>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
 
@@ -27,27 +30,22 @@ export const Login = () => {
     try {
       setApiError(null);
       const response = await loginRequest(data);
-      
       login(response.access, response.user);
-
-      if (response.user.is_staff) {
-        navigate('/admin/solicitudes');
-      } else {
-        navigate('/');
-      }
+      navigate(response.user.is_staff ? '/admin/solicitudes' : '/');
     } catch (error: any) {
-      if (error.response?.status === 401) {
-        setApiError('Credenciales incorrectas. Verifica tu usuario y contraseña.');
-      } else {
-        setApiError('Ocurrió un error en el servidor. Inténtalo más tarde.');
-      }
+      setApiError(
+        error.response?.status === 401
+          ? 'Credenciales incorrectas. Verifica tu usuario y contraseña.'
+          : 'Ocurrió un error en el servidor. Inténtalo más tarde.'
+      );
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-sm border border-gray-100">
-        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+    <div className="flex-1 flex items-center justify-center px-4">
+      {/* CARD */}
+      <div className="w-full max-w-md bg-white/90 backdrop-blur rounded-2xl shadow-xl p-8 border border-purple-100">
+        <h2 className="text-2xl font-bold text-purple-700 text-center mb-6">
           Iniciar Sesión
         </h2>
 
@@ -58,6 +56,7 @@ export const Login = () => {
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* USER */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Nombre de usuario
@@ -65,16 +64,18 @@ export const Login = () => {
             <input
               type="text"
               {...register('username')}
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow ${
+              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 ${
                 errors.username ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="Ingresa tu usuario"
             />
             {errors.username && (
-              <p className="mt-1 text-sm text-red-500">{errors.username.message}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.username.message}
+              </p>
             )}
           </div>
 
+          {/* PASSWORD */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Contraseña
@@ -82,29 +83,35 @@ export const Login = () => {
             <input
               type="password"
               {...register('password')}
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow ${
+              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 ${
                 errors.password ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="••••••••"
             />
             {errors.password && (
-              <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
+          {/* BUTTON */}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-300"
+            className="w-full bg-purple-600 text-white font-medium py-2 rounded-md hover:bg-purple-700 transition disabled:opacity-60"
           >
             {isSubmitting ? 'Iniciando sesión...' : 'Ingresar'}
           </button>
-            <p className="mt-6 text-center text-sm text-gray-600">
-                ¿Aún no tienes una cuenta?{' '}
-                <Link to="/registro" className="font-medium text-blue-600 hover:text-blue-500 hover:underline">
-                    Regístrate aquí
-                </Link>
-            </p>
+
+          <p className="mt-6 text-center text-sm text-gray-600">
+            ¿Aún no tienes una cuenta?{' '}
+            <Link
+              to="/registro"
+              className="font-medium text-purple-600 hover:underline"
+            >
+              Regístrate aquí
+            </Link>
+          </p>
         </form>
       </div>
     </div>
