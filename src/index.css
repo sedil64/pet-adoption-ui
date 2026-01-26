@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gray-50 text-gray-800;
+/* ===============================
+   FONDO SOLO PARA HOME
+================================ */
+body.home-background {
+  background-image: url("/images/fondo_pagina.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
+
