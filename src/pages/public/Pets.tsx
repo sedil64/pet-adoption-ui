@@ -11,7 +11,6 @@ export const Pets = () => {
   const [searchText, setSearchText] = useState('');
   const [filters, setFilters] = useState<Record<string, any>>({});
 
-  // 🔹 Debounce: searchText → filters
   useEffect(() => {
     const timeout = setTimeout(() => {
       setFilters((prev) => ({
@@ -23,7 +22,6 @@ export const Pets = () => {
     return () => clearTimeout(timeout);
   }, [searchText]);
 
-  // 🔹 Cargar mascotas cuando cambian los filtros
   useEffect(() => {
     const fetchPets = async () => {
       try {
@@ -45,7 +43,6 @@ export const Pets = () => {
 
   return (
     <div>
-      {/* TÍTULO */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">
           Mascotas en adopción
@@ -55,7 +52,6 @@ export const Pets = () => {
         </p>
       </div>
 
-      {/* BUSCADOR (siempre montado) */}
       <div className="mb-6 max-w-md">
         <input
           type="text"
@@ -66,7 +62,6 @@ export const Pets = () => {
         />
       </div>
 
-      {/* LOADING */}
       {loading && (
         <div className="flex justify-center items-center py-12">
           <span className="text-gray-500 font-medium">
@@ -75,14 +70,12 @@ export const Pets = () => {
         </div>
       )}
 
-      {/* ERROR */}
       {error && (
         <div className="bg-red-50 text-red-600 p-4 rounded-lg border border-red-100 text-center">
           {error}
         </div>
       )}
 
-      {/* LISTA */}
       {!loading && !error && (
         pets.length === 0 ? (
           <div className="text-center text-gray-500 py-12 bg-white rounded-lg border border-gray-100">
