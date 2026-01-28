@@ -23,9 +23,13 @@ export const Navbar = ({ onOpenSidebar }: NavbarProps) => {
           <div className="flex items-center gap-6">
             <Link
               to="/"
-              className="text-purple-700 font-bold text-xl tracking-tight hover:opacity-80 transition"
+              className="flex items-center gap-2 hover:opacity-90 transition"
             >
-              Puppy Family
+              <img
+                src="/images/puppy_family_logo.png"
+                alt="Puppy Family"
+                className="h-16 w-auto"
+              />
             </Link>
             <div className="hidden md:flex space-x-6">
               <NavLink to="/" className={navLinkClasses}>

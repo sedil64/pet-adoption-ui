@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
+import { Footer } from './Footer';
 
 export const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -25,19 +26,17 @@ export const MainLayout = () => {
           : { backgroundColor: '#f9fafb' }
       }
     >
+      {/* NAVBAR */}
       <Navbar onOpenSidebar={() => setIsSidebarOpen(true)} />
 
+      {/* SIDEBAR */}
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      {/* 🔥 ESTE DIV ES LA CLAVE */}
-      <div
-        className={`flex-1 flex ${
-          isHomeOrAuth ? 'bg-white/70' : ''
-        }`}
-      >
+      {/* CONTENIDO */}
+      <div className={`flex-1 ${isHomeOrAuth ? 'bg-white/70' : ''}`}>
         <main
           className={
             isHomeOrAuth
@@ -48,6 +47,9 @@ export const MainLayout = () => {
           <Outlet />
         </main>
       </div>
+
+      {/* FOOTER (SIEMPRE ABAJO) */}
+      <Footer />
     </div>
   );
 };

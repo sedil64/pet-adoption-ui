@@ -4,7 +4,6 @@ import "./Home.css";
 export default function Home() {
   return (
     <div className="home-bg">
-      {/* OVERLAY BLANCO */}
       <div className="home-overlay">
         <div className="home-container">
 
@@ -53,6 +52,41 @@ export default function Home() {
             description="Promovemos la adopción responsable y el bienestar animal."
             bgColor="#FFD6E8"
           />
+
+          {/* =====================
+              PROCESO DE ADOPCIÓN
+          ===================== */}
+          <h2 className="home-section-title">¿Cómo adoptar?</h2>
+
+          <div className="process-grid">
+            <ProcesoCard
+              number="1"
+              icon="🐶"
+              title="Conoce a los candidatos"
+              text='Tómate tu tiempo. Lee sus historias, revisa su edad y personalidad. Cuando sientas esa conexión especial, entra a su perfil. Tip: busca el botón "Quiero Adoptar".'
+            />
+
+            <ProcesoCard
+              number="2"
+              icon="✍️"
+              title="Cuéntanos sobre ti"
+              text="Llena la Solicitud de Adopción digital. Es rápida y nos ayuda a saber si son compatibles."
+            />
+
+            <ProcesoCard
+              number="3"
+              icon="🤝"
+              title="¡Hacemos Match!"
+              text='Nuestro equipo evalúa tu perfil. Si eres el indicado, tu solicitud cambiará a "Aceptada". Te notificaremos al instante.'
+            />
+
+            <ProcesoCard
+              number="4"
+              icon="❤️"
+              title="Llévalo a casa"
+              text="Selecciona una fecha para visitar el refugio. Finalizamos el papeleo y sales con tu nuevo compañero."
+            />
+          </div>
 
           {/* =====================
               ADOPTADOS
@@ -107,6 +141,29 @@ function RefugioCard({
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
+    </div>
+  );
+}
+
+/* =============================
+   CARD DE PROCESO
+============================= */
+type ProcesoProps = {
+  number: string;
+  icon: string;
+  title: string;
+  text: string;
+};
+
+function ProcesoCard({ number, icon, title, text }: ProcesoProps) {
+  return (
+    <div className="process-card">
+      <div className="process-header">
+        <span className="process-number">{number}</span>
+        <span className="process-icon">{icon}</span>
+      </div>
+      <h3 className="process-title">{title}</h3>
+      <p className="process-text">{text}</p>
     </div>
   );
 }

@@ -9,8 +9,6 @@ interface SidebarProps {
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const { user, isAdmin, logout } = useAuthStore();
 
-  if (!user) return null;
-
   const linkClasses = ({ isActive }: { isActive: boolean }) =>
     `block p-3 rounded-lg transition-colors ${
       isActive
@@ -31,7 +29,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       <aside
         role="dialog"
         aria-modal="true"
-        aria-label="Menú de usuario"
+        aria-label="Menú lateral"
         className={`fixed inset-y-0 right-0 w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
@@ -39,14 +37,18 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         <div className="flex items-center justify-between p-6 border-b">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
-              {user.username.charAt(0).toUpperCase()}
+              {user ? user.username.charAt(0).toUpperCase() : '👋'}
             </div>
             <div>
               <h2 className="text-base font-bold text-gray-800">
-                {user.username}
+                {user ? user.username : 'Bienvenido'}
               </h2>
               <p className="text-xs text-gray-500">
-                {isAdmin ? 'Administrador' : 'Adoptante'}
+                {user
+                  ? isAdmin
+                    ? 'Administrador'
+                    : 'Adoptante'
+                  : 'Invitado'}
               </p>
             </div>
           </div>
@@ -61,52 +63,106 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         </div>
 
         <nav className="p-4 space-y-2 font-medium">
-          {isAdmin ? (
-            <>
-              <div className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Administración
-              </div>
 
-              <NavLink to="/admin/solicitudes" onClick={onClose} className={linkClasses}>
-                Gestión de Solicitudes
-              </NavLink>
+          <div className="md:hidden">
+            <NavLink to="/" onClick={onClose} className={linkClasses}>
+              Inicio
+            </NavLink>
 
-              <NavLink to="/admin/usuarios" onClick={onClose} className={linkClasses}>
-                Gestión de Usuarios
-              </NavLink>
+            <NavLink to="/mascotas" onClick={onClose} className={linkClasses}>
+              Mascotas
+            </NavLink>
 
-              <NavLink to="/admin/mascotas" onClick={onClose} className={linkClasses}>
-                Gestión de Mascotas
-              </NavLink>
-              <NavLink to="/admin/refugios" onClick={onClose} className={linkClasses}>
-                Gestión de Refugios
-              </NavLink>
-            </>
-          ) : (
-            <NavLink to="/mis-solicitudes" onClick={onClose} className={linkClasses}>
-              Mis Solicitudes
+            <NavLink to="/shelters" onClick={onClose} className={linkClasses}>
+              Refugios
+            </NavLink>
+
+            <div className="my-3 border-t" />
+          </div>
+
+          {!user && (
+            <NavLink to="/login" onClick={onClose} className={linkClasses}>
+              Iniciar sesión
             </NavLink>
           )}
 
-          <div className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-            Cuenta
-          </div>
+          {user && (
+            <>
+              {isAdmin ? (
+                <>
+                  <div className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    Administración
+                  </div>
 
-          <NavLink to="/perfil" onClick={onClose} className={linkClasses}>
-            Cambiar Contraseña
-          </NavLink>
+                  <NavLink
+                    to="/admin/solicitudes"
+                    onClick={onClose}
+                    className={linkClasses}
+                  >
+                    Gestión de Solicitudes
+                  </NavLink>
+
+                  <NavLink
+                    to="/admin/usuarios"
+                    onClick={onClose}
+                    className={linkClasses}
+                  >
+                    Gestión de Usuarios
+                  </NavLink>
+
+                  <NavLink
+                    to="/admin/mascotas"
+                    onClick={onClose}
+                    className={linkClasses}
+                  >
+                    Gestión de Mascotas
+                  </NavLink>
+
+                  <NavLink
+                    to="/admin/refugios"
+                    onClick={onClose}
+                    className={linkClasses}
+                  >
+                    Gestión de Refugios
+                  </NavLink>
+                </>
+              ) : (
+                <NavLink
+                  to="/mis-solicitudes"
+                  onClick={onClose}
+                  className={linkClasses}
+                >
+                  Mis Solicitudes
+                </NavLink>
+              )}
+
+              <div className="pt-4 pb-2 px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Cuenta
+              </div>
+
+              <NavLink
+                to="/perfil"
+                onClick={onClose}
+                className={linkClasses}
+              >
+                Cambiar Contraseña
+              </NavLink>
+            </>
+          )}
         </nav>
-        <div className="absolute bottom-0 w-full p-4 border-t bg-gray-50">
-          <button
-            onClick={() => {
-              logout();
-              onClose();
-            }}
-            className="w-full p-3 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors font-medium"
-          >
-            Cerrar sesión
-          </button>
-        </div>
+        {user && (
+          <div className="absolute bottom-0 w-full p-4 border-t bg-gray-50">
+            <button
+              onClick={() => {
+                logout();
+                onClose();
+              }}
+              className="w-full p-3 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors font-medium"
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        )}
       </aside>
     </>
   );
