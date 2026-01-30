@@ -41,7 +41,6 @@ export const PetDetail = () => {
     useState<MyAdoptionResponse | null>(null);
   const [loadingAdoption, setLoadingAdoption] = useState(false);
 
-  /* 🔹 Cargar mascota */
   useEffect(() => {
     const fetchPet = async () => {
       if (!id) return;
@@ -59,7 +58,6 @@ export const PetDetail = () => {
     fetchPet();
   }, [id]);
 
-  /* 🔹 Cargar mi solicitud */
   useEffect(() => {
     if (!isAuthenticated || !id) return;
 

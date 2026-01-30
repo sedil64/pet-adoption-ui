@@ -45,7 +45,6 @@ export const Pets = () => {
 
   return (
     <div className="space-y-10">
-      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-800">
           Mascotas en adopción
@@ -56,7 +55,6 @@ export const Pets = () => {
         </p>
       </div>
 
-      {/* Filtros */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
         <input
           type="text"
@@ -82,7 +80,6 @@ export const Pets = () => {
         </select>
       </div>
 
-      {/* Loading */}
       {loading && (
         <div className="flex justify-center items-center py-16">
           <span className="text-gray-500 font-medium">
@@ -91,14 +88,12 @@ export const Pets = () => {
         </div>
       )}
 
-      {/* Error */}
       {error && (
         <div className="bg-red-50 text-red-600 p-4 rounded-lg border border-red-100 text-center">
           {error}
         </div>
       )}
 
-      {/* Grid */}
       {!loading && !error && (
         pets.length === 0 ? (
           <div className="text-center text-gray-500 py-16 bg-white rounded-lg border border-gray-100">

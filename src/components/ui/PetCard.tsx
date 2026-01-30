@@ -24,7 +24,6 @@ export const PetCard = ({ pet }: PetCardProps) => {
       to={`/mascotas/${pet.id}`}
       className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200 flex flex-col h-full"
     >
-      {/* Imagen */}
       <div className="aspect-w-4 aspect-h-3 h-48 w-full overflow-hidden bg-gray-100 relative">
         <img
           src={pet.photo || defaultImage}
@@ -32,7 +31,6 @@ export const PetCard = ({ pet }: PetCardProps) => {
           className="w-full h-full object-cover"
         />
 
-        {/* 🟢⚪ Estado */}
         <span
           className={`absolute top-3 right-3 text-xs px-3 py-1 rounded-full font-medium border ${
             isAvailable
@@ -43,8 +41,6 @@ export const PetCard = ({ pet }: PetCardProps) => {
           {statusLabel}
         </span>
       </div>
-
-      {/* Contenido */}
       <div className="p-4 flex flex-col flex-1">
         <h3 className="text-lg font-bold text-gray-800 mb-1">
           {pet.name}
@@ -64,8 +60,6 @@ export const PetCard = ({ pet }: PetCardProps) => {
             {pet.age} años
           </p>
         </div>
-
-        {/* 📖 Descripción */}
         {pet.description && (
           <p className="text-sm text-gray-600 mb-4 line-clamp-3">
             {pet.description}

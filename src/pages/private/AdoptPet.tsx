@@ -11,7 +11,7 @@ interface AdoptionFormValues {
   phone_number?: string;
   address?: string;
   has_other_pets?: boolean;
-  home_photo?: FileList;
+  home_photo?: FileList; 
 }
 
 export const AdoptPet = () => {
@@ -50,23 +50,16 @@ export const AdoptPet = () => {
     try {
       setSubmitError(null);
 
-      const formData = new FormData();
-      formData.append('pet', String(pet.id));
+      await createAdoptionRequest({
+        pet: pet.id,
+        notes: data.notes,
+      });
 
-      if (data.notes) formData.append('notes', data.notes);
-      if (data.phone_number) formData.append('phone_number', data.phone_number);
-      if (data.address) formData.append('address', data.address);
-      if (data.has_other_pets !== undefined) {
-        formData.append('has_other_pets', String(data.has_other_pets));
-      }
-      if (data.home_photo && data.home_photo[0]) {
-        formData.append('home_photo', data.home_photo[0]);
-      }
-
-      await createAdoptionRequest(formData);
       navigate('/mis-solicitudes');
     } catch {
-      setSubmitError('Ocurrió un error al enviar la solicitud. Intenta nuevamente.');
+      setSubmitError(
+        'Ocurrió un error al enviar la solicitud. Intenta nuevamente.'
+      );
     }
   };
 
@@ -102,12 +95,7 @@ export const AdoptPet = () => {
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6"
-        encType="multipart/form-data"
-      >
-        {/* Datos usuario */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -137,7 +125,7 @@ export const AdoptPet = () => {
           </label>
           <input
             {...register('phone_number')}
-            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded-md"
             placeholder="+593 9xxxxxxx"
           />
         </div>
@@ -149,7 +137,7 @@ export const AdoptPet = () => {
           <textarea
             {...register('address')}
             rows={2}
-            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded-md"
             placeholder="Ciudad, barrio, referencias..."
           />
         </div>
@@ -184,7 +172,7 @@ export const AdoptPet = () => {
           <textarea
             {...register('notes')}
             rows={4}
-            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded-md"
             placeholder="Cuéntanos sobre el hogar que le ofrecerías…"
           />
         </div>
