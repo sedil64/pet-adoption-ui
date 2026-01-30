@@ -16,6 +16,7 @@ const petSchema = z.object({
   gender: z.string().min(1, 'El género es requerido'),
   status: z.string().min(1, 'El estado es requerido'),
   shelter: z.number().min(1, 'Debes seleccionar un refugio'),
+  description: z.string().min(10, 'La descripción debe tener al menos 10 caracteres'),
   photo: z.any().optional(),
 });
 
@@ -75,6 +76,7 @@ export const AddPet = () => {
       formData.append('gender', data.gender);
       formData.append('status', data.status);
       formData.append('shelter', data.shelter.toString());
+      formData.append('description', data.description);
       formData.append(
         'admission_date',
         new Date().toISOString().split('T')[0]
@@ -177,7 +179,7 @@ export const AddPet = () => {
               <p className="mt-1 text-xs text-red-500">
                 {errors.gender.message}
               </p>
-            )}
+            )}  
           </div>
         </div>
 
@@ -219,6 +221,34 @@ export const AddPet = () => {
               </p>
             )}
           </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Estado
+          </label>
+          <select
+            {...register('status')}
+            className="w-full px-4 py-2 border rounded-md bg-white"
+          >
+            <option value="AVAILABLE">Disponible</option>
+            <option value="ADOPTED">Adoptado</option>
+          </select>
+        </div>        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Descripción
+          </label>
+          <textarea
+            {...register('description')}
+            rows={4}
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+            placeholder="Describe la personalidad, cuidados y características de la mascota..."
+          />
+          {errors.description && (
+            <p className="mt-1 text-xs text-red-500">
+              {errors.description.message}
+            </p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">

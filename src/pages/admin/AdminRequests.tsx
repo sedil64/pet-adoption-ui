@@ -1,16 +1,38 @@
 import { useEffect, useState } from 'react';
-import { getAllAdoptionRequests, updateAdoptionRequestStatus } from '../../api/adoptionApi';
+import { Link } from 'react-router-dom';
+import {
+  getAllAdoptionRequests,
+  approveAdoptionRequest,
+  rejectAdoptionRequest,
+} from '../../api/adoptionApi';
+import type { AdoptionResponse } from '../../api/adoptionApi';
 
-interface RequestWithDetails {
-  id: number;
-  pet: number;
-  user: number;
-  status: string;
-  created_at: string;
-}
+type AdoptionStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+
+const STATUS_CONFIG: Record<
+  AdoptionStatus,
+  { label: string; className: string }
+> = {
+  PENDING: {
+    label: 'Pendiente',
+    className: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+  },
+  APPROVED: {
+    label: 'Aprobada',
+    className: 'bg-green-100 text-green-800 border-green-200',
+  },
+  REJECTED: {
+    label: 'Rechazada',
+    className: 'bg-red-100 text-red-800 border-red-200',
+  },
+  CANCELLED: {
+    label: 'Cancelada',
+    className: 'bg-gray-100 text-gray-700 border-gray-200',
+  },
+};
 
 export const AdminRequests = () => {
-  const [requests, setRequests] = useState<RequestWithDetails[]>([]);
+  const [requests, setRequests] = useState<AdoptionResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +41,7 @@ export const AdminRequests = () => {
       setLoading(true);
       const data = await getAllAdoptionRequests();
       setRequests(data);
-    } catch (err) {
+    } catch {
       setError('No se pudieron cargar las solicitudes.');
     } finally {
       setLoading(false);
@@ -30,84 +52,149 @@ export const AdminRequests = () => {
     fetchRequests();
   }, []);
 
-  const handleUpdateStatus = async (id: number, newStatus: string) => {
-    const actionText = newStatus === 'approved' ? 'aprobar' : 'rechazar';
-    if (!window.confirm(`¿Estás seguro de que deseas ${actionText} esta solicitud?`)) return;
+  const handleApprove = async (id: number) => {
+    if (!window.confirm('¿Deseas aprobar esta solicitud?')) return;
 
     try {
-      await updateAdoptionRequestStatus(id, { status: newStatus });
-      setRequests((prev) => 
-        prev.map(req => req.id === id ? { ...req, status: newStatus } : req)
-      );
-    } catch (err) {
-      alert('Ocurrió un error al actualizar el estado.');
+      await approveAdoptionRequest(id);
+      await fetchRequests();
+    } catch {
+      alert('Error al aprobar la solicitud.');
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'approved':
-        return <span className="px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-xs font-medium">Aprobada</span>;
-      case 'cancelled':
-      case 'rejected':
-        return <span className="px-3 py-1 bg-red-50 text-red-700 border border-red-200 rounded-full text-xs font-medium">Rechazada</span>;
-      default:
-        return <span className="px-3 py-1 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-full text-xs font-medium">Pendiente</span>;
+  const handleReject = async (id: number) => {
+    if (!window.confirm('¿Deseas rechazar esta solicitud?')) return;
+
+    try {
+      await rejectAdoptionRequest(id);
+      await fetchRequests();
+    } catch {
+      alert('Error al rechazar la solicitud.');
     }
   };
 
-  if (loading) return <div className="text-center py-12 text-gray-500 font-medium">Cargando todas las solicitudes...</div>;
-  if (error) return <div className="text-center py-12 text-red-600 font-medium">{error}</div>;
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12 bg-red-50 text-red-600 rounded-lg border border-red-200">
+        {error}
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Gestión de Solicitudes</h1>
-        <p className="text-gray-600 mt-2">Revisa, aprueba o rechaza las peticiones de adopción de los usuarios.</p>
-      </div>
+    <div className="p-6">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        Panel de Adopciones
+      </h1>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Req.</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario (ID)</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mascota (ID)</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-              <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Usuario
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Mascota
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Fecha
+              </th>
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+                Estado
+              </th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                Acciones
+              </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {requests.map((request) => (
-              <tr key={request.id} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">#{request.id}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Usuario #{request.user}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mascota #{request.pet}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(request.status)}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                  {request.status.toLowerCase() === 'pending' || request.status.toLowerCase() === 'in_review' ? (
-                    <>
-                      <button 
-                        onClick={() => handleUpdateStatus(request.id, 'approved')}
-                        className="text-green-600 hover:text-green-900 bg-green-50 px-3 py-1 rounded-md transition-colors"
+
+          <tbody className="divide-y divide-gray-200">
+            {requests.map((req) => {
+              const statusKey = req.status.toUpperCase() as AdoptionStatus;
+              const config = STATUS_CONFIG[statusKey];
+
+              return (
+                <tr key={req.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4">
+                    <div className="font-medium">{req.user_name}</div>
+                    <div className="text-xs text-gray-500">{req.user_email}</div>
+                  </td>
+
+                  <td className="px-6 py-4">
+                    <div className="font-medium">{req.pet_name}</div>
+                    <div className="text-xs uppercase text-indigo-600">
+                      {req.pet_species}
+                    </div>
+                  </td>
+
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    {formatDate(req.request_date)}
+                  </td>
+
+                  <td className="px-6 py-4 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold border ${config.className}`}
+                    >
+                      {config.label}
+                    </span>
+                  </td>
+
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex justify-end gap-3">
+                      <Link
+                        to={`/admin/solicitudes/${req.id}`}
+                        className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-md"
                       >
-                        Aprobar
-                      </button>
-                      <button 
-                        onClick={() => handleUpdateStatus(request.id, 'rejected')}
-                        className="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-md transition-colors"
-                      >
-                        Rechazar
-                      </button>
-                    </>
-                  ) : (
-                    <span className="text-gray-400 italic">Acción completada</span>
-                  )}
-                </td>
-              </tr>
-            ))}
+                        Ver detalle
+                      </Link>
+
+                      {statusKey === 'PENDING' && (
+                        <>
+                          <button
+                            onClick={() => handleApprove(req.id)}
+                            className="px-3 py-1.5 text-xs bg-green-100 text-green-700 rounded-md"
+                          >
+                            Aprobar
+                          </button>
+                          <button
+                            onClick={() => handleReject(req.id)}
+                            className="px-3 py-1.5 text-xs bg-red-100 text-red-700 rounded-md"
+                          >
+                            Rechazar
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
+
+        {requests.length === 0 && (
+          <div className="text-center py-10 text-gray-500">
+            No hay solicitudes registradas.
+          </div>
+        )}
       </div>
     </div>
   );

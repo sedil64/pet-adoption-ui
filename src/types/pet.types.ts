@@ -1,3 +1,4 @@
+export type PetStatus = 'AVAILABLE' | 'ADOPTED';
 export interface Pet {
   id: number;
   name: string;
@@ -5,9 +6,10 @@ export interface Pet {
   breed: string;
   age: number;
   gender: string;
-  status: string;
+  status: PetStatus;
   admission_date?: string;
   shelter: number;
   shelter_name?: string;
   photo?: string;
+  description?: string | null;
 }

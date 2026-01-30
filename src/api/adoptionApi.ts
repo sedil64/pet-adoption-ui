@@ -7,20 +7,23 @@ interface PaginatedResponse<T> {
   results: T[];
 }
 
-interface CreateAdoptionRequest {
-  user: number;
+export interface CreateAdoptionRequest {
   pet: number;
   notes?: string;
-  status: string;
+  status?: string; 
 }
 
-interface AdoptionResponse {
+export interface AdoptionResponse {
   id: number;
-  user: number;
-  pet: number;
+  user: number; 
+  pet: number;  
   status: string;
   notes?: string;
-  created_at: string;
+  request_date: string; 
+  user_name: string;
+  user_email: string;
+  pet_name: string;
+  pet_species: string;
 }
 
 export const createAdoptionRequest = async (data: CreateAdoptionRequest): Promise<AdoptionResponse> => {
@@ -46,4 +49,19 @@ interface UpdateRequestStatus {
 export const updateAdoptionRequestStatus = async (id: number, data: UpdateRequestStatus): Promise<AdoptionResponse> => {
   const response = await api.patch<AdoptionResponse>(`/adoption-requests/${id}/`, data);
   return response.data;
+};
+
+export const approveAdoptionRequest = async (id: number) => {
+  console.log('APPROVING ID:', id);
+  const { data } = await api.post(`/adoption-requests/${id}/approve/`);
+  return data;
+};
+export const rejectAdoptionRequest = async (id: number) => {
+  const { data } = await api.post(`/adoption-requests/${id}/reject/`);
+  return data;
+};
+
+export const getAdoptionRequestById = async (id: number) => {
+  const { data } = await api.get(`/adoption-requests/${id}/`);
+  return data;
 };

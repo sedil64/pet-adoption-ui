@@ -19,6 +19,7 @@ import { ShelterDetail } from '../pages/public/ShelterDetail';
 import { AdminShelters } from '../pages/admin/AdminShelters';
 import { AddShelter } from '../pages/admin/AddShelter';
 import { EditShelter } from '../pages/admin/EditShelter';
+import { AdminAdoptionRequestDetail } from '../pages/admin/AdminAdoptionRequestDetail';
 
 export const AppRouter = () => {
   return (
@@ -57,7 +58,9 @@ export const AppRouter = () => {
             <Route path="/admin/refugios" element={<AdminShelters />} />
             <Route path="/admin/refugios/nuevo" element={<AddShelter />} />
             <Route path="/admin/refugios/:id/editar" element={<EditShelter />} />
+            <Route path="/admin/solicitudes/:id" element={<AdminAdoptionRequestDetail />}/>
           </Route>
+          
 
         </Route>
 
