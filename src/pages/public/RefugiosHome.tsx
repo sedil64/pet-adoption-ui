@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { getShelters } from '../../api/shelters.api';
-import type { Shelter } from '../../api/shelters.api';
+import { useEffect, useState } from "react";
+import { getShelters } from "../../api/shelters.api";
+import type { Shelter } from "../../types/shelter.types";
 
 export default function RefugiosHome() {
   const [shelters, setShelters] = useState<Shelter[]>([]);
@@ -13,7 +13,11 @@ export default function RefugiosHome() {
   }, []);
 
   if (loading) {
-    return <p className="text-center text-gray-500">Cargando refugios...</p>;
+    return (
+      <p className="text-center text-gray-500">
+        Cargando refugios...
+      </p>
+    );
   }
 
   return (

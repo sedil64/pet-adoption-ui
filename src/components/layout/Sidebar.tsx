@@ -140,13 +140,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 Cuenta
               </div>
 
-              <NavLink
-                to="/perfil"
-                onClick={onClose}
-                className={linkClasses}
-              >
-                Cambiar Contraseña
-              </NavLink>
+
             </>
           )}
         </nav>

@@ -1,15 +1,5 @@
-import { api } from './axiosConfig';
-
-export interface Shelter {
-  id: number;
-  name: string;
-  address: string;
-  phone: string;
-  email?: string;
-  photo: string | null;
-  pets_count: number;
-  is_active: boolean;
-}
+import { api } from "./axiosConfig";
+import type { Shelter } from "../types/shelter.types";
 
 interface PaginatedResponse<T> {
   count: number;
@@ -22,7 +12,7 @@ interface PaginatedResponse<T> {
  * LISTAR REFUGIOS (público)
  */
 export const getShelters = async (): Promise<Shelter[]> => {
-  const res = await api.get<PaginatedResponse<Shelter> | Shelter[]>('/shelters/');
+  const res = await api.get<PaginatedResponse<Shelter> | Shelter[]>("/shelters/");
   return Array.isArray(res.data) ? res.data : res.data.results;
 };
 
@@ -38,8 +28,8 @@ export const getShelterById = async (id: number): Promise<Shelter> => {
  * CREAR REFUGIO (admin)
  */
 export const createShelter = async (data: FormData): Promise<Shelter> => {
-  const res = await api.post<Shelter>('/shelters/', data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+  const res = await api.post<Shelter>("/shelters/", data, {
+    headers: { "Content-Type": "multipart/form-data" },
   });
   return res.data;
 };
@@ -52,7 +42,7 @@ export const updateShelter = async (
   data: FormData
 ): Promise<Shelter> => {
   const res = await api.patch<Shelter>(`/shelters/${id}/`, data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { "Content-Type": "multipart/form-data" },
   });
   return res.data;
 };
