@@ -1,32 +1,55 @@
-// src/pages/public/Home.tsx
 import "./Home.css";
+import RefugiosHome from "./RefugiosHome";
+import MascotasCarousel from "./MascotasCarousel";
 
 export default function Home() {
   return (
     <div className="home-bg">
       <div className="home-overlay">
+
+        {/* =====================
+            CONTENEDOR CENTRAL (TEXTOS)
+        ===================== */}
         <div className="home-container">
 
-          {/* =====================
-              TÍTULO
-          ===================== */}
+          {/* TÍTULO */}
           <h1 className="home-title">PUPPY FAMILY</h1>
           <p className="home-subtitle">
             Salvando vidas, un amigo a la vez
           </p>
 
           {/* =====================
-              IMAGEN PRINCIPAL
+              CARRUSEL MASCOTAS
           ===================== */}
-          <img
-            src="/images/dogs/street_dogs.png"
-            alt="Perritos de la calle"
-            className="home-main-image"
-          />
-
           {/* =====================
-              DESCRIPCIÓN
+              CARRUSEL MASCOTAS
           ===================== */}
+          <h2 className="home-section-title">
+            Descubre cientos de mascotas por adoptar
+          </h2>
+          <p className="home-subtitle">Descúbrelas</p>
+
+          <div className="carousel-fullwidth">
+            <MascotasCarousel />
+          </div>
+        </div>
+
+        {/* =====================
+            HERO IMAGE FULL WIDTH (FUERA DEL CONTAINER)
+        ===================== */}
+        <div className="home-full-image">
+          <img
+            src="/images/dogs/street_dogs.jpg"
+            alt="Mascotas buscando un hogar"
+          />
+        </div>
+
+        {/* =====================
+            CONTENEDOR CENTRAL (RESTO DEL CONTENIDO)
+        ===================== */}
+        <div className="home-container">
+
+          {/* DESCRIPCIÓN */}
           <p className="home-description">
             Puppy Family es una plataforma dedicada a ayudar a perritos y gatitos
             en situación de calle a encontrar un hogar. Trabajamos junto a
@@ -34,24 +57,13 @@ export default function Home() {
           </p>
 
           {/* =====================
-              REFUGIOS
+              REFUGIOS (BACKEND)
           ===================== */}
-          <h2 className="home-section-title">Refugios asociados</h2>
+          <h2 className="home-section-title">
+            Trabajamos con estos refugios
+          </h2>
 
-          <RefugioCard
-            imageRight
-            image="/images/shelters/refugio1.jpg"
-            title="Refugio Huellitas"
-            description="Rescate y cuidado de perritos abandonados."
-            bgColor="#FFE1C6"
-          />
-
-          <RefugioCard
-            image="/images/shelters/refugio2.jpg"
-            title="Patitas Felices"
-            description="Promovemos la adopción responsable y el bienestar animal."
-            bgColor="#FFD6E8"
-          />
+          <RefugiosHome />
 
           {/* =====================
               PROCESO DE ADOPCIÓN
@@ -63,7 +75,7 @@ export default function Home() {
               number="1"
               icon="🐶"
               title="Conoce a los candidatos"
-              text='Tómate tu tiempo. Lee sus historias, revisa su edad y personalidad. Cuando sientas esa conexión especial, entra a su perfil. Tip: busca el botón "Quiero Adoptar".'
+              text='Tómate tu tiempo. Lee sus historias, revisa su edad y personalidad. Cuando sientas esa conexión especial, entra a su perfil.'
             />
 
             <ProcesoCard
@@ -77,14 +89,14 @@ export default function Home() {
               number="3"
               icon="🤝"
               title="¡Hacemos Match!"
-              text='Nuestro equipo evalúa tu perfil. Si eres el indicado, tu solicitud cambiará a "Aceptada". Te notificaremos al instante.'
+              text='Nuestro equipo evalúa tu perfil. Si eres el indicado, tu solicitud cambiará a "Aceptada".'
             />
 
             <ProcesoCard
               number="4"
               icon="❤️"
               title="Llévalo a casa"
-              text="Selecciona una fecha para visitar el refugio. Finalizamos el papeleo y sales con tu nuevo compañero."
+              text="Selecciona una fecha para visitar el refugio y finaliza el proceso con tu nuevo compañero."
             />
           </div>
 
@@ -100,7 +112,7 @@ export default function Home() {
                 <img
                   key={i}
                   src={`/images/dogs/${img}`}
-                  alt="Perrito adoptado"
+                  alt="Mascota adoptada"
                   className="adopted-image"
                 />
               )
@@ -108,38 +120,6 @@ export default function Home() {
           </div>
 
         </div>
-      </div>
-    </div>
-  );
-}
-
-/* =============================
-   CARD DE REFUGIO
-============================= */
-type RefugioProps = {
-  imageRight?: boolean;
-  image: string;
-  title: string;
-  description: string;
-  bgColor: string;
-};
-
-function RefugioCard({
-  imageRight,
-  image,
-  title,
-  description,
-  bgColor,
-}: RefugioProps) {
-  return (
-    <div
-      className={`refugio-card ${imageRight ? "reverse" : ""}`}
-      style={{ backgroundColor: bgColor }}
-    >
-      <img src={image} alt={title} className="refugio-image" />
-      <div className="refugio-text">
-        <h3>{title}</h3>
-        <p>{description}</p>
       </div>
     </div>
   );

@@ -57,7 +57,7 @@ export const Footer = () => {
             </h3>
             <ul className="space-y-2 text-sm text-purple-300">
               <li>📍 Quito-Ecuador</li>
-              <li>📧 contacto@puppyfamily.org</li>
+              <li>📧 puppy.family.app@gmail.com</li>
               <li>❤️ Adopción responsable</li>
             </ul>
           </div>

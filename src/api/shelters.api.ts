@@ -1,5 +1,16 @@
 import { api } from './axiosConfig';
 
+export interface Shelter {
+  id: number;
+  name: string;
+  address: string;
+  phone: string;
+  email?: string;
+  photo: string | null;
+  pets_count: number;
+  is_active: boolean;
+}
+
 interface PaginatedResponse<T> {
   count: number;
   next: string | null;
@@ -7,28 +18,48 @@ interface PaginatedResponse<T> {
   results: T[];
 }
 
-export const getShelters = async () => {
-  const res = await api.get<PaginatedResponse<any> | any[]>('/shelters/');
+/**
+ * LISTAR REFUGIOS (público)
+ */
+export const getShelters = async (): Promise<Shelter[]> => {
+  const res = await api.get<PaginatedResponse<Shelter> | Shelter[]>('/shelters/');
   return Array.isArray(res.data) ? res.data : res.data.results;
 };
 
-export const getShelterById = (id: number) =>
-  api.get(`/shelters/${id}/`).then(res => res.data);
-
-export const createShelter = async (data: FormData) => {
-  const response = await api.post('/shelters/', data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
-  return response.data;
+/**
+ * OBTENER REFUGIO POR ID
+ */
+export const getShelterById = async (id: number): Promise<Shelter> => {
+  const res = await api.get<Shelter>(`/shelters/${id}/`);
+  return res.data;
 };
 
-export const updateShelter = async (id: number, data: FormData) => {
-  const response = await api.patch(`/shelters/${id}/`, data, {
+/**
+ * CREAR REFUGIO (admin)
+ */
+export const createShelter = async (data: FormData): Promise<Shelter> => {
+  const res = await api.post<Shelter>('/shelters/', data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
-  return response.data;
+  return res.data;
 };
 
-export const deleteShelter = async (id: number) => {
+/**
+ * ACTUALIZAR REFUGIO (admin)
+ */
+export const updateShelter = async (
+  id: number,
+  data: FormData
+): Promise<Shelter> => {
+  const res = await api.patch<Shelter>(`/shelters/${id}/`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return res.data;
+};
+
+/**
+ * ELIMINAR REFUGIO (admin)
+ */
+export const deleteShelter = async (id: number): Promise<void> => {
   await api.delete(`/shelters/${id}/`);
 };
