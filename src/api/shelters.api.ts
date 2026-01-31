@@ -9,29 +9,39 @@ interface PaginatedResponse<T> {
 }
 
 /**
+ * Normaliza refugio (photo nunca será null)
+ */
+const normalizeShelter = (shelter: any): Shelter => ({
+  ...shelter,
+  photo: shelter.photo ?? "",
+});
+
+/**
  * LISTAR REFUGIOS (público)
  */
 export const getShelters = async (): Promise<Shelter[]> => {
-  const res = await api.get<PaginatedResponse<Shelter> | Shelter[]>("/shelters/");
-  return Array.isArray(res.data) ? res.data : res.data.results;
+  const res = await api.get<PaginatedResponse<any> | any[]>("/shelters/");
+  const data = Array.isArray(res.data) ? res.data : res.data.results;
+
+  return data.map(normalizeShelter);
 };
 
 /**
  * OBTENER REFUGIO POR ID
  */
 export const getShelterById = async (id: number): Promise<Shelter> => {
-  const res = await api.get<Shelter>(`/shelters/${id}/`);
-  return res.data;
+  const res = await api.get<any>(`/shelters/${id}/`);
+  return normalizeShelter(res.data);
 };
 
 /**
  * CREAR REFUGIO (admin)
  */
 export const createShelter = async (data: FormData): Promise<Shelter> => {
-  const res = await api.post<Shelter>("/shelters/", data, {
+  const res = await api.post<any>("/shelters/", data, {
     headers: { "Content-Type": "multipart/form-data" },
   });
-  return res.data;
+  return normalizeShelter(res.data);
 };
 
 /**
@@ -41,10 +51,10 @@ export const updateShelter = async (
   id: number,
   data: FormData
 ): Promise<Shelter> => {
-  const res = await api.patch<Shelter>(`/shelters/${id}/`, data, {
+  const res = await api.patch<any>(`/shelters/${id}/`, data, {
     headers: { "Content-Type": "multipart/form-data" },
   });
-  return res.data;
+  return normalizeShelter(res.data);
 };
 
 /**

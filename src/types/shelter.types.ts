@@ -4,7 +4,7 @@ export interface Shelter {
   address: string;
   phone: string;
   email?: string;
-  photo: string | null; 
+  photo: string;       
   pets_count: number;
   is_active: boolean;
 }
